@@ -7,16 +7,17 @@ const openai = new OpenAI({
 });
 
 const categorizedPage = async (pageInfo) => {
+  const { headings, metaDescription } = pageInfo;
   const stream = await openai.chat.completions.create({
     messages: [
       {
         role: "system",
         content:
-          "You are going to analyze this object that contains a list of headings in a page, the meta description and the url. Provide an answer with a JSON object containing the following keys: title, description and categories, categories is an array of strings. Add at least 6 categories to categorize the given page info. This is going to be added to a DB later, so make sure the JSON object is valid. Try to provide the main functionality of the page in the title and the meta description in the description. For example, if it talks about an API, it's probably an API. If the meta description is not found, add your own description in 150 characters max. If you are not able to provide the requested information, please respond: Error. The main categories are: API, Documentation, Tutorial",
+          "Analyze this JSON that contains a list of headings in a page and the meta description. Provide an answer with a JSON object containing the following keys: title, description and categories, categories is an array of strings. Add at least 6 categories to categorize the given page info. The main categories are: API, Documentation, Tutorial. This is going to be added to a DB later, so make sure the JSON object is valid. Try to provide the main functionality of the page in the title and a summarized description keeping in mind all the info given. For example, if it talks about an API, the title should include API. If the meta description is not found, add your own description in 150 characters max. If the information is in another language, translate it to english. If you are not able to provide the requested information, please respond: Error. ",
       },
       {
         role: "user",
-        content: JSON.stringify(pageInfo),
+        content: JSON.stringify({ headings, metaDescription }),
       },
     ],
     model: "gpt-4o",
