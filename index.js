@@ -11,7 +11,7 @@ app.get("/", (req, res) => {
   res.send(`The url is: ${url}`);
 });
 
-app.get("/scrap", async (req, res) => {
+app.get("/categorize", async (req, res) => {
   const url = req.query.url;
 
   try {
