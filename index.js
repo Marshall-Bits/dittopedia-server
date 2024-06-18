@@ -18,6 +18,7 @@ app.get("/categorize", async (req, res) => {
     const page = await fetch(url);
     const html = await page.text();
     const pageInfo = { ...getHtmlInfo(html), url };
+    const { favIcon } = pageInfo;
     const response = await categorizedPage(pageInfo);
 
     if (response.includes("Error")) {
@@ -27,8 +28,8 @@ app.get("/categorize", async (req, res) => {
       return;
     }
 
-    console.log(response);
-    res.status(200).send(response);
+    const parsedResponse = JSON.parse(response);
+    res.status(200).send({ ...parsedResponse, url, favIcon });
   } catch {
     res.status(400).send({
       message:
