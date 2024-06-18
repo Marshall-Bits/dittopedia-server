@@ -21,6 +21,7 @@ const categorizedPage = async (pageInfo) => {
     ],
     model: "gpt-4o",
   });
+  // gpt response includes the JSON tags, so we need to remove them
   return stream.choices[0].message.content.slice(7).slice(0, -3);
 };
 
