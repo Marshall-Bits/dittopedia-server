@@ -2,12 +2,15 @@ import express from "express";
 import logger from "morgan";
 import { getHtmlInfo } from "./utils/formatInfo.js";
 import { categorizedPage } from "./utils/categorize.js";
+import { resourceRoutes } from "./routes/resource.routes.js";
 import connectToDB from "./db/index.js";
-import { router as resourceRoutes } from "./routes/resource.routes.js";
 
 const app = express();
 connectToDB();
+
 app.use(logger("dev"));
+app.use(express.json());
+
 app.use("/resource", resourceRoutes);
 
 app.get("/", (req, res) => {
