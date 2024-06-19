@@ -4,14 +4,18 @@ const router = express.Router();
 
 // ROUTES FOR /resource
 
-router.get("/", (req, res) => {
-  res.send("This is the resource route");
+router.get("/", async (req, res) => {
+  try {
+    const resources = await Resource.find();
+    res.status(200).send(resources);
+  } catch (error) {
+    res.status(400).send(error);
+  }
 });
 
 router.post("/", async (req, res) => {
-  console.log("REQ BODY", req.body);
   const { title, description, categories, url, favIcon } = req.body;
-
+ 
   try {
     const newResource = {
       title,
