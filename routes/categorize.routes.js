@@ -1,6 +1,7 @@
 import express from "express";
 import { getHtmlInfo } from "../utils/formatInfo.js";
 import { categorizedPage } from "../utils/categorize.js";
+import formatFavIcon from "../utils/formatFavIcon.js";
 
 // ROUTES for /categorize
 
@@ -24,7 +25,9 @@ router.get("/", async (req, res) => {
     }
 
     const parsedResponse = JSON.parse(response);
-    res.status(200).send({ ...parsedResponse, url, favIcon });
+    res
+      .status(200)
+      .send({ ...parsedResponse, url, favIcon: formatFavIcon(favIcon, url) });
   } catch {
     res.status(400).send({
       message:
@@ -32,6 +35,5 @@ router.get("/", async (req, res) => {
     });
   }
 });
-
 
 export { router as categorizeRoutes };
