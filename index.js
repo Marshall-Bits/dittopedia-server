@@ -2,8 +2,10 @@ import express from "express";
 import logger from "morgan";
 import { getHtmlInfo } from "./utils/formatInfo.js";
 import { categorizedPage } from "./utils/categorize.js";
+import connectToDB from "./db/index.js";
 
 const app = express();
+connectToDB();
 app.use(logger("dev"));
 
 app.get("/", (req, res) => {
