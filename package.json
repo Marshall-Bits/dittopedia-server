@@ -11,6 +11,7 @@
   "author": "Marshall-Bits",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.19.2",
     "jsdom": "^24.1.0",
     "mongoose": "^8.4.3",
