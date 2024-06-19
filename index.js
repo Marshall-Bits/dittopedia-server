@@ -3,10 +3,12 @@ import logger from "morgan";
 import { getHtmlInfo } from "./utils/formatInfo.js";
 import { categorizedPage } from "./utils/categorize.js";
 import connectToDB from "./db/index.js";
+import { router as resourceRoutes } from "./routes/resource.routes.js";
 
 const app = express();
 connectToDB();
 app.use(logger("dev"));
+app.use("/resource", resourceRoutes);
 
 app.get("/", (req, res) => {
   const url = req.query.url;
