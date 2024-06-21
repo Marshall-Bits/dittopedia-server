@@ -10,11 +10,15 @@ router.get("/", async (req, res) => {
   try {
     let query = {};
     if (searchQuery) {
+      const searchQueries = Array.isArray(searchQuery) ? searchQuery : [searchQuery];
+
       query = {
-        $or: [
-          { categories: { $elemMatch: { $regex: new RegExp(searchQuery, "i") } } },
-          { title: { $regex: new RegExp(searchQuery, "i") } },
-        ],
+        $and: searchQueries.map(query => ({
+          $or: [
+            { categories: { $elemMatch: { $regex: new RegExp(query, "i") } } },
+            { title: { $regex: new RegExp(query, "i") } }
+          ]
+        }))
       };
     }
 
@@ -36,7 +40,6 @@ router.post("/", async (req, res) => {
       url,
       favIcon,
     };
-
     const savedResource = await Resource.create(newResource);
     res.status(201).send(savedResource);
   } catch (error) {
