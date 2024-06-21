@@ -9,8 +9,26 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
   const url = req.query.url;
-  console.log(url);
 
+  if (!url) {
+    res.status(400).send({ message: "Please provide a URL" });
+    return;
+  }
+  /* res.send({
+    title: "Feature Testing Platform",
+    description:
+      "Platform to test and explore new features. Support via Patreon. Browse latest and most searched features.",
+    categories: [
+      "Documentation",
+      "Support",
+      "Testing",
+      "Tools",
+      "Browser Scores",
+      "Feature Testing",
+    ],
+    url: "https://caniuse.com/",
+    favIcon: formatFavIcon("/img/favicon-128.png",  "https://caniuse.com/"),
+  }); */
   try {
     const page = await fetch(url);
     const html = await page.text();
