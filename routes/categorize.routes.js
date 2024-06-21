@@ -9,6 +9,7 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
   const url = req.query.url;
+  console.log(url);
 
   try {
     const page = await fetch(url);
@@ -25,6 +26,7 @@ router.get("/", async (req, res) => {
     }
 
     const parsedResponse = JSON.parse(response);
+
     res
       .status(200)
       .send({ ...parsedResponse, url, favIcon: formatFavIcon(favIcon, url) });

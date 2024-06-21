@@ -5,8 +5,20 @@ const router = express.Router();
 // ROUTES FOR /resource
 
 router.get("/", async (req, res) => {
+  const { searchQuery } = req.query;
+
   try {
-    const resources = await Resource.find();
+    let query = {};
+    if (searchQuery) {
+      query = {
+        $or: [
+          { categories: { $elemMatch: { $regex: new RegExp(searchQuery, "i") } } },
+          { title: { $regex: new RegExp(searchQuery, "i") } },
+        ],
+      };
+    }
+
+    const resources = await Resource.find(query).sort({ title: 1 });
     res.status(200).send(resources);
   } catch (error) {
     res.status(400).send(error);
@@ -15,7 +27,7 @@ router.get("/", async (req, res) => {
 
 router.post("/", async (req, res) => {
   const { title, description, categories, url, favIcon } = req.body;
- 
+
   try {
     const newResource = {
       title,
