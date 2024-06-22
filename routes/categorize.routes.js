@@ -38,7 +38,7 @@ router.get("/", async (req, res) => {
 
     if (response.includes("Error")) {
       res
-        .status(400)
+        .status(422)
         .send({ message: "Error getting the categories for this page" });
       return;
     }
@@ -49,7 +49,7 @@ router.get("/", async (req, res) => {
       .status(200)
       .send({ ...parsedResponse, url, favIcon: formatFavIcon(favIcon, url) });
   } catch {
-    res.status(400).send({
+    res.status(404).send({
       message:
         "Unable to get info from this page, please provide another URL or add the information manually.",
     });
