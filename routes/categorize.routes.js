@@ -14,7 +14,8 @@ router.get("/", async (req, res) => {
     res.status(400).send({ message: "Please provide a URL" });
     return;
   }
-  /* res.send({
+  setTimeout(() => {
+  res.send({
     title: "Feature Testing Platform",
     description:
       "Platform to test and explore new features. Support via Patreon. Browse latest and most searched features.",
@@ -28,8 +29,8 @@ router.get("/", async (req, res) => {
     ],
     url: "https://caniuse.com/",
     favIcon: formatFavIcon("/img/favicon-128.png",  "https://caniuse.com/"),
-  }); */
-  try {
+  }); 
+  /* try {
     const page = await fetch(url);
     const html = await page.text();
     const pageInfo = { ...getHtmlInfo(html), url };
@@ -53,7 +54,8 @@ router.get("/", async (req, res) => {
       message:
         "Unable to get info from this page, please provide another URL or add the information manually.",
     });
-  }
+  } */
+}, 2000);
 });
 
 export { router as categorizeRoutes };
