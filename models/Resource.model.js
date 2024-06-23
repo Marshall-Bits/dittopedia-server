@@ -10,6 +10,19 @@ const resourceSchema = new Schema(
       type: String,
       required: [true, "Description is required"],
     },
+    mainCategory: {
+      type: String,
+      enum: [
+        "books",
+        "videos",
+        "courses",
+        "documentation",
+        "assets",
+        "tools",
+        "news",
+      ],
+      required: [true, "Main category is required"],
+    },
     categories: {
       type: [String],
       required: [true, "Categories are required"],

@@ -1,5 +1,5 @@
 import express from "express";
-import { Resource } from "../models/resource.model.js";
+import { Resource } from "../models/Resource.model.js";
 const router = express.Router();
 
 // ROUTES FOR /resource
@@ -16,6 +16,7 @@ router.get("/", async (req, res) => {
         $and: searchQueries.map(query => ({
           $or: [
             { categories: { $elemMatch: { $regex: new RegExp(query, "i") } } },
+            { mainCategory: { $regex: new RegExp(query, "i") } },
             { title: { $regex: new RegExp(query, "i") } }
           ]
         }))
@@ -30,7 +31,7 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  const { title, description, categories, url, favIcon } = req.body;
+  const { title, description, categories, url, favIcon, mainCategory } = req.body;
 
   try {
     const newResource = {
@@ -39,6 +40,7 @@ router.post("/", async (req, res) => {
       categories,
       url,
       favIcon,
+      mainCategory,
     };
     const savedResource = await Resource.create(newResource);
     res.status(201).send(savedResource);
