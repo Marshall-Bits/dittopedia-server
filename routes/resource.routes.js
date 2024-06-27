@@ -25,7 +25,26 @@ router.get("/", async (req, res) => {
     }
 
     const resources = await Resource.find(query).sort({ mainCategory: 1, title: 1});
-    res.status(200).send(resources);
+
+     // Group resources by mainCategory
+     const groupedResources = resources.reduce((acc, resource) => {
+      const { mainCategory } = resource;
+      if (!acc[mainCategory]) {
+        acc[mainCategory] = [];
+      }
+      acc[mainCategory].push(resource);
+      return acc;
+    }, {});
+
+    // Convert grouped resources into an array of objects
+    const filteredResources = Object.keys(groupedResources)
+      .filter(category => groupedResources[category].length > 0)
+      .map(category => ({
+        category,
+        resources: groupedResources[category]
+      }));
+
+    res.status(200).send(filteredResources);
   } catch (error) {
     res.status(400).send(error);
   }
