@@ -24,7 +24,7 @@ router.get("/", async (req, res) => {
       };
     }
 
-    const resources = await Resource.find(query).sort({ title: 1 });
+    const resources = await Resource.find(query).sort({ mainCategory: 1, title: 1});
     res.status(200).send(resources);
   } catch (error) {
     res.status(400).send(error);
