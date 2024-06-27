@@ -3,6 +3,7 @@ import User from "../models/User.model.js";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import { isAuthenticated } from "../middlewares/jwt.js";
 
 dotenv.config();
 
@@ -48,6 +49,8 @@ router.post("/login", async (req, res) => {
       return;
     }
 
+    const { _id, username, role } = user;
+
     const passwordIsValid = bcryptjs.compareSync(password, user.password);
 
     if (!passwordIsValid) {
@@ -55,19 +58,27 @@ router.post("/login", async (req, res) => {
       return;
     }
 
-    const token = jwt.sign({ id: user._id }, process.env.SECRET, {
-      expiresIn: 86400,
+    const payload = {
+      _id,
+      username,
+      email,
+      role,
+    };
+
+    const token = jwt.sign(payload, process.env.SECRET, {
+      expiresIn: 86400, // 24 hours
     });
 
     res.status(200).send({
-      id: user._id,
-      username: user.username,
-      email: user.email,
       accessToken: token,
     });
   } catch (error) {
     res.status(500).send({ message: error.message });
   }
+});
+
+router.get("/verify", isAuthenticated, (req, res) => {
+  res.status(200).send(req.payload);
 });
 
 export { router as authRoutes };
