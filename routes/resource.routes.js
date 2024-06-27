@@ -1,5 +1,6 @@
 import express from "express";
 import { Resource } from "../models/Resource.model.js";
+import { isAuthenticated } from "../middlewares/jwt.js";
 const router = express.Router();
 
 // ROUTES FOR /resource
@@ -30,8 +31,13 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/", isAuthenticated, async (req, res) => {
   const { title, description, categories, url, favIcon, mainCategory } = req.body;
+  
+  if (req.payload.role !== "admin") {
+    res.status(401).send({ message: "Unauthorized" });
+    return;
+  }
 
   try {
     const newResource = {

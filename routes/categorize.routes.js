@@ -2,13 +2,19 @@ import express from "express";
 import { getHtmlInfo } from "../utils/formatInfo.js";
 import { categorizedPage } from "../utils/categorize.js";
 import formatFavIcon from "../utils/formatFavIcon.js";
+import { isAuthenticated } from "../middlewares/jwt.js";
 
 // ROUTES for /categorize
 
 const router = express.Router();
 
-router.get("/", async (req, res) => {
+router.get("/", isAuthenticated, async (req, res) => {
   const url = req.query.url;
+  
+  if (req.payload.role !== "admin") {
+    res.status(401).send({ message: "Unauthorized" });
+    return;
+  }
 
   if (!url) {
     res.status(400).send({ message: "Please provide a URL" });
