@@ -36,6 +36,10 @@ const resourceSchema = new Schema(
       default:
         "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Globe_icon.svg/420px-Globe_icon.svg.png",
     },
+    color: {
+      type: String,
+      default: "rgb(255,255,255)",
+    },
   },
   {
     timestamps: true,
