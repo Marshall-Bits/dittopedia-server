@@ -9,15 +9,14 @@ import { isAuthenticated } from "../middlewares/jwt.js";
 const router = express.Router();
 
 router.post("/all", isAuthenticated, async (req, res) => {
+  // update all the resources with the dominant color
   const resources = await Resource.find();
-  const colorPromises = resources.map(async (resource) => {
+  for (const resource of resources) {
     const color = await getDominantColor(resource.favIcon);
-    return { title: resource.title, color };
-  });
-
-  const resourcesWithColor = await Promise.all(colorPromises);
-
-  res.send(resourcesWithColor);
+    const formattedColor = `rgba(${color.join(",")}, 0.5)`;
+    await Resource.findByIdAndUpdate(resource._id, { color: formattedColor });
+  }
+  res.send("Colors updated");
 });
 
 export { router as colorRoutes };
