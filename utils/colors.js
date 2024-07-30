@@ -27,7 +27,6 @@ const loadImageFromBuffer = async (buffer) => {
 const applyBlur = (context, width, height) => {
   context.filter = "blur(8px)";
   context.drawImage(context.canvas, 0, 0, width, height, 0, 0, width, height);
-  context.filter = "none";
 };
 
 const collectNonTransparentPixels = (imageData) => {
@@ -78,9 +77,8 @@ const getDominantColor = async (imageUrl) => {
       ({ image, width, height } = await loadImageFromBuffer(buffer));
     }
 
-    // Scale the image up to 10x the original size
-    const scaledWidth = width * 10;
-    const scaledHeight = height * 10;
+    const scaledWidth = width * 20;
+    const scaledHeight = height * 20;
     const canvas = createCanvas(scaledWidth, scaledHeight);
     const context = canvas.getContext("2d");
     context.drawImage(image, 0, 0, scaledWidth, scaledHeight);
