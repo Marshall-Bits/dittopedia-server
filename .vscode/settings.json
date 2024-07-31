@@ -1,0 +1,12 @@
+{
+    "workbench.colorTheme": "Material Theme Palenight High Contrast",
+    "workbench.colorCustomizations": {
+        "[Material Theme Palenight High Contrast]": {
+            "titleBar.activeBackground": "#008782",
+            "titleBar.activeForeground": "#ffffff",
+            "toolbar.activeBackground": "#008782",
+            "statusBar.background": "#008782",
+            "statusBar.foreground": "#ffffff",
+        }
+    }
+}
