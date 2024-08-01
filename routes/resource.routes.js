@@ -51,7 +51,7 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/", isAuthenticated, async (req, res) => {
-  const { title, description, categories, url, favIcon, mainCategory } = req.body;
+  const { title, description, categories, url, favIcon, mainCategory, color } = req.body;
   
   if (req.payload.role !== "admin") {
     res.status(401).send({ message: "Unauthorized" });
@@ -66,6 +66,7 @@ router.post("/", isAuthenticated, async (req, res) => {
       url,
       favIcon,
       mainCategory,
+      color
     };
     const savedResource = await Resource.create(newResource);
     res.status(201).send(savedResource);
