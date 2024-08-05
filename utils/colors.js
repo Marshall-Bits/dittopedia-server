@@ -133,4 +133,20 @@ const convertToRGB = (color) => {
   return `rgba(${r}, ${g}, ${b}, 0.5)`;
 };
 
-export { getDominantColor, invertColor, convertToRGB };
+const convertToHex = (color) => {
+  if (color.startsWith("#")) {
+    return color;
+  }
+
+  const [r, g, b] = color
+    .replace("rgba(", "")
+    .replace(")", "")
+    .split(",")
+    .map((c) => parseInt(c.trim()));
+
+  return `#${r.toString(16).padStart(2, "0")}${g
+    .toString(16)
+    .padStart(2, "0")}${b.toString(16).padStart(2, "0")}`;
+};
+
+export { getDominantColor, invertColor, convertToRGB, convertToHex };

@@ -1,7 +1,7 @@
 import express from "express";
 import { Resource } from "../models/Resource.model.js";
 import { isAuthenticated } from "../middlewares/jwt.js";
-import { convertToRGB } from "../utils/colors.js";
+import { convertToRGB, convertToHex } from "../utils/colors.js";
 const router = express.Router();
 
 // ROUTES FOR /resource
@@ -77,6 +77,48 @@ router.post("/", isAuthenticated, async (req, res) => {
     };
     const savedResource = await Resource.create(newResource);
     res.status(201).send(savedResource);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+});
+
+router.get("/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const resource = await Resource.findById(id);
+    resource.color = convertToHex(resource.color);
+    res.status(200).send(resource);
+  } catch (error) {
+    console.log(error);
+    res.status(400).send(error);
+  }
+});
+
+router.put("/:id", isAuthenticated, async (req, res) => {
+  const { id } = req.params;
+  const { title, description, categories, url, favIcon, mainCategory, color } =
+    req.body;
+
+  if (req.payload.role !== "admin") {
+    res.status(401).send({ message: "Unauthorized" });
+    return;
+  }
+
+  try {
+    const updatedResource = {
+      title,
+      description,
+      categories,
+      url,
+      favIcon,
+      mainCategory,
+      color: convertToRGB(color),
+    };
+    const resource = await Resource.findByIdAndUpdate(id, updatedResource, {
+      new: true,
+    });
+    res.status(200).send(resource);
   } catch (error) {
     res.status(400).send(error);
   }
