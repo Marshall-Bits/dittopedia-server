@@ -83,10 +83,8 @@ const getDominantColor = async (imageUrl) => {
     const context = canvas.getContext("2d");
     context.drawImage(image, 0, 0, scaledWidth, scaledHeight);
 
-    // Apply blur
     applyBlur(context, scaledWidth, scaledHeight);
 
-    // Resize down to 16x16
     const smallCanvas = createCanvas(16, 16);
     const smallContext = smallCanvas.getContext("2d");
     smallContext.drawImage(
@@ -105,7 +103,7 @@ const getDominantColor = async (imageUrl) => {
     const colors = collectNonTransparentPixels(imageData);
 
     if (colors.length === 0) {
-      throw new Error("No non-transparent pixels found");
+      throw new Error("Any non-transparent pixels found");
     }
 
     return calculateDominantColor(colors);
@@ -119,4 +117,20 @@ const invertColor = ([r, g, b]) => {
   return [255 - r, 255 - g, 255 - b];
 };
 
-export { getDominantColor, invertColor };
+const convertToRGB = (color) => {
+  if (color.startsWith("rgba")) {
+    return color;
+  }
+  // if it's just RGB we should add the alpha value 0.5
+  else if (color.startsWith("rgb")) {
+    return color.replace("rgb", "rgba").replace(")", ", 0.5)");
+  }
+
+  const hex = color.replace("#", "");
+  const r = parseInt(hex.substring(0, 2), 16);
+  const g = parseInt(hex.substring(2, 4), 16);
+  const b = parseInt(hex.substring(4, 6), 16);
+  return `rgba(${r}, ${g}, ${b}, 0.5)`;
+};
+
+export { getDominantColor, invertColor, convertToRGB };
