@@ -22,7 +22,7 @@ const categorizedPage = async (pageInfo) => {
         content: JSON.stringify({ headings, metaDescription }),
       },
     ],
-    model: "gpt-3.5-turbo",
+    model: "gpt-4o-mini",
   });
   return stream.choices[0].message.content;
 };
