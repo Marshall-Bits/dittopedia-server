@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.get("/", isAuthenticated, async (req, res) => {
   const url = req.query.url;
-  
+
   if (req.payload.role !== "admin") {
     res.status(401).send({ message: "Unauthorized" });
     return;
@@ -20,7 +20,7 @@ router.get("/", isAuthenticated, async (req, res) => {
     res.status(400).send({ message: "Please provide a URL" });
     return;
   }
-   res.send({
+  /*  res.send({
     title: "Feature Testing Platform",
     description:
       "Platform to test and explore new features. Support via Patreon. Browse latest and most searched features.",
@@ -36,8 +36,8 @@ router.get("/", isAuthenticated, async (req, res) => {
     url: "https://caniuse.com/",
     favIcon: formatFavIcon("/img/favicon-128.png",  "https://caniuse.com/"),
     color: "rgb(0, 0, 30)",
-  }); 
-/*   try {
+  });  */
+  try {
     const page = await fetch(url);
     const html = await page.text();
     const pageInfo = { ...getHtmlInfo(html), url };
@@ -55,13 +55,13 @@ router.get("/", isAuthenticated, async (req, res) => {
 
     res
       .status(200)
-      .send({ ...parsedResponse, url, favIcon: formatFavIcon(favIcon, url) }); 
+      .send({ ...parsedResponse, url, favIcon: formatFavIcon(favIcon, url) });
   } catch {
     res.status(404).send({
       message:
         "Unable to get info from this page, please provide another URL or add the information manually.",
     });
-  }*/
+  }
 });
 
 export { router as categorizeRoutes };
