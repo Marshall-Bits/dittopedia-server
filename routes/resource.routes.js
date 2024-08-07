@@ -124,4 +124,21 @@ router.put("/:id", isAuthenticated, async (req, res) => {
   }
 });
 
+router.delete("/:id", isAuthenticated, async (req, res) => {
+  const { id } = req.params;
+
+  if (req.payload.role !== "admin") {
+    res.status(401).send({ message: "Unauthorized" });
+    return;
+  }
+
+  try {
+    await Resource.findByIdAndDelete(id);
+    res.status(204).send();
+  } catch (error) {
+    res.status(400).send(error);
+  }
+  
+});
+
 export { router as resourceRoutes };
